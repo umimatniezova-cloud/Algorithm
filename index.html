@@ -160,6 +160,7 @@
 </div>
 
 <div class="container">
+    <!-- AUTH PAGE -->
     <div id="page-auth" class="page active">
         <h2>TIZIMGA KIRISH</h2>
         <div class="subtitle">OZOD TRADER SYSTEM</div>
@@ -175,6 +176,7 @@
         <p style="text-align:center; font-size:12px; color:#8892b0; cursor:pointer; margin-top:20px;" id="auth-toggle" onclick="toggleAuthMode()">Akkaunt yo'qmi? Ro'yxatdan o'tish</p>
     </div>
 
+    <!-- CALCULATOR PAGE -->
     <div id="page-calc" class="page">
         <h2>OZOD TRADER ALGORITHM</h2>
         <div class="subtitle">PREMIUM ALGORITHMS OYNASI</div>
@@ -223,6 +225,7 @@
         </div>
     </div>
 
+    <!-- 🤖 NEW PAGE: AI VISION ANALYZER OYNASI -->
     <div id="page-ai" class="page">
         <h2>AI VISION ANALYZER</h2>
         <div class="subtitle">GRAFIK RASMINI CHUKUR TAHLIL QILISH TIZIMI</div>
@@ -256,6 +259,7 @@
         </div>
     </div>
 
+    <!-- ADMIN PANEL -->
     <div id="page-admin" class="page">
         <h2>ADMIN PANELI</h2>
         <div class="subtitle">Foydalanuvchilar Ro'yxati</div>
@@ -289,8 +293,8 @@
 </div>
 
 <script>
-// GEMINI API KALITINGIZNI SHUYERGA QO'YING (Daxshatli aniqlikda analiz qiladi)
-const GEMINI_API_KEY = "SESHEN_YOKI_GEMINI_API_KEYINGIZNI_SHUYERGA_QOYING";
+// GEMINI HAQIQIY API KALITINGIZ SHU YERGA JOYLASHDI 💎
+const GEMINI_API_KEY = "AIzaSyDWmZbEE6uW3nZbqeC7LQVd7pLxvuhBLhI";
 
 const FIREBASE_BASE_URL = "https://kalkulyator-25ebc-default-rtdb.firebaseio.com/"; 
 const FIREBASE_URL = FIREBASE_BASE_URL.endsWith('/') ? FIREBASE_BASE_URL + 'users' : FIREBASE_BASE_URL + '/users';
@@ -516,7 +520,7 @@ function runQuadraticAlgo() {
 
 // 🤖 REAL TIME AI VISION PROCESSOR
 function previewAiImage(event) {
-    const file = event.target.get ? event.target.files[0] : event.target.files[0];
+    const file = event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
@@ -553,17 +557,11 @@ Vazifangiz rasmni juda katta aniqlikda tahlil qilib, quyidagilarni aniqlash:
 4. Foydalanuvchining qo'shimcha savoli bo'lsa javob bering: "${userNote ? userNote : 'Yoq'}".
 Javobingizni juda professional, aniq va lkonik qilib, to'liq o'zbek tilida yozing. Kelgusi ehtimoliy yo'nalishni Buy yoki Sell ko'rinishida foizlarda baholang.`;
 
-    // AGAR API KEY QO'YILMAGAN BO'LSA, SIMULYATSIYA (DEMO) ANALIZ CHIQARADI
     if (GEMINI_API_KEY === "SESHEN_YOKI_GEMINI_API_KEYINGIZNI_SHUYERGA_QOYING" || GEMINI_API_KEY === "") {
         setTimeout(() => {
             statusText.style.display = 'none';
             responseBox.style.display = 'block';
-            responseBox.innerHTML = `<strong>⚠️ DIQQAT (DEMO REJIM):</strong> API kalit o'rnatilmaganligi sababli, algoritmik tahlil simulyatsiyasi ko'rsatilmoqda.<br><br>
-            <strong>📊 Grafik Skaner Natijasi:</strong><br>
-            • <b>Asset / Bozor:</b> Grafik asosida aniqlangan struktura yuqori likvidli trendni ko'rsatmoqda.<br>
-            • <b>Struktura (MSNR):</b> Oxirgi shamchalarda Market Structure Shift (MSS) kuzatilgan. Narx pastki Order Block segmentini test qilmoqda.<br>
-            • <b>Gep (Gap) tahlili:</b> Dushanba kungi ochilishda narx 65% ehtimollik bilan pastki likvidlikni yig'ish (Liquidity Sweep) uchun kichik gep bilan ochilishi yoki darslik bo'yicha Fair Value Gap (FVG) zonasini to'ldirish uchun harakatlanishi mumkin.<br>
-            • <b>Xulosa:</b> 75% Buy ehtimolligi yuqori, chunki instutsional xaridorlar zonasi faollashgan.`;
+            responseBox.innerHTML = `<strong>⚠️ DIQQAT (DEMO REJIM):</strong> API kalit o'rnatilmaganligi sababli, algoritmik tahlil simulyatsiyasi ko'rsatilmoqda.`;
         }, 3000);
         return;
     }
@@ -598,7 +596,6 @@ Javobingizni juda professional, aniq va lkonik qilib, to'liq o'zbek tilida yozin
 
         if (resData.candidates && resData.candidates[0].content.parts[0].text) {
             let textOutput = resData.candidates[0].content.parts[0].text;
-            // Markdowns formatlarini chiroyli qilish uchun almashtiramiz
             textOutput = textOutput.replace(/\n/g, "<br>").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\*(.*?)\*/g, "<i>$1</i>");
             responseBox.innerHTML = `<strong>🤖 AI CHUKUR TAHLILI:</strong><br><br>${textOutput}`;
         } else {
