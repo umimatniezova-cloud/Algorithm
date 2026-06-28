@@ -57,13 +57,7 @@
 
 <div id="calc-screen" class="card hidden">
     <h3>OZOD TRADE PRO</h3>
-    <input type="number" id="h" placeholder="HIGH">
-    <input type="number" id="l" placeholder="LOW">
-    <div id="output"></div>
-    <div class="btn-group">
-        <button class="btn-buy" onclick="sniperCalc('buy')">BUY</button>
-        <button class="btn-sell" onclick="sniperCalc('sell')">SELL</button>
-    </div>
+    <div id="calc-content"></div>
     <button class="btn-sec" onclick="location.reload()">CHIQISH</button>
 </div>
 
@@ -92,35 +86,37 @@
         const u = document.getElementById('login-user').value.trim();
         const p = document.getElementById('login-pass').value.trim();
         const snap = await get(child(ref(db), 'users/' + u));
+        
         if(snap.exists() && snap.val().pass === p) {
             showPage('calc-screen');
+            if (snap.val().premium === true) {
+                document.getElementById('calc-content').innerHTML = `
+                    <input type="number" id="h" placeholder="HIGH">
+                    <input type="number" id="l" placeholder="LOW">
+                    <div id="output"></div>
+                    <div class="btn-group">
+                        <button class="btn-buy" onclick="sniperCalc('buy')">BUY</button>
+                        <button class="btn-sell" onclick="sniperCalc('sell')">SELL</button>
+                    </div>`;
+            } else {
+                document.getElementById('calc-content').innerHTML = `<h3 style="color:red; margin-top:20px;">PREMIUM FAOL EMAS!</h3>`;
+            }
         } else alert("Username yoki parol xato!");
     }
 
-    // Sniper uslubidagi hisoblash funksiyasi
     function sniperCalc(type) {
         const h = parseFloat(document.getElementById('h').value);
         const l = parseFloat(document.getElementById('l').value);
         if (isNaN(h) || isNaN(l)) return alert("High va Low ni kiriting!");
 
         const range = h - l;
-        let razvorot, korrektsiya, konsolidatsiya;
-
+        let r, k, c;
         if (type === 'buy') {
-            razvorot = l + (range * 0.236);
-            korrektsiya = l + (range * 0.5);
-            konsolidatsiya = l + (range * 0.764);
+            r = l + (range * 0.236); k = l + (range * 0.5); c = l + (range * 0.764);
         } else {
-            razvorot = h - (range * 0.236);
-            korrektsiya = h - (range * 0.5);
-            konsolidatsiya = h - (range * 0.764);
+            r = h - (range * 0.236); k = h - (range * 0.5); c = h - (range * 0.764);
         }
-
-        document.getElementById('output').innerHTML = `
-            Razvorot: ${razvorot.toFixed(2)}<br>
-            Korrektsiya: ${korrektsiya.toFixed(2)}<br>
-            Konsolidatsiya: ${konsolidatsiya.toFixed(2)}
-        `;
+        document.getElementById('output').innerHTML = `Razvorot: ${r.toFixed(2)}<br>Korrektsiya: ${k.toFixed(2)}<br>Konsolidatsiya: ${c.toFixed(2)}`;
     }
 
     function adminLogin() {
