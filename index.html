@@ -34,7 +34,7 @@
         .hidden { display: none; }
         table { width: 100%; color: white; font-size: 12px; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #333; padding: 5px; text-align: center; }
-        #output { margin-top: 15px; color: #d4af37; }
+        #output { margin-top: 15px; color: #d4af37; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -59,11 +59,10 @@
     <h3>OZOD TRADE PRO</h3>
     <input type="number" id="h" placeholder="HIGH">
     <input type="number" id="l" placeholder="LOW">
-    <button class="btn-calc" onclick="calculate()">HISOBLASH</button>
     <div id="output"></div>
     <div class="btn-group">
-        <button class="btn-buy">BUY</button>
-        <button class="btn-sell">SELL</button>
+        <button class="btn-buy" onclick="sniperCalc('buy')">BUY</button>
+        <button class="btn-sell" onclick="sniperCalc('sell')">SELL</button>
     </div>
     <button class="btn-sec" onclick="location.reload()">CHIQISH</button>
 </div>
@@ -98,12 +97,30 @@
         } else alert("Username yoki parol xato!");
     }
 
-    function calculate() {
+    // Sniper uslubidagi hisoblash funksiyasi
+    function sniperCalc(type) {
         const h = parseFloat(document.getElementById('h').value);
         const l = parseFloat(document.getElementById('l').value);
-        let res = "";
-        for(let i=1; i<=4; i++) res += `${i}-zona: ${(l + (h-l)*(i*0.2)).toFixed(2)}<br>`;
-        document.getElementById('output').innerHTML = res;
+        if (isNaN(h) || isNaN(l)) return alert("High va Low ni kiriting!");
+
+        const range = h - l;
+        let razvorot, korrektsiya, konsolidatsiya;
+
+        if (type === 'buy') {
+            razvorot = l + (range * 0.236);
+            korrektsiya = l + (range * 0.5);
+            konsolidatsiya = l + (range * 0.764);
+        } else {
+            razvorot = h - (range * 0.236);
+            korrektsiya = h - (range * 0.5);
+            konsolidatsiya = h - (range * 0.764);
+        }
+
+        document.getElementById('output').innerHTML = `
+            Razvorot: ${razvorot.toFixed(2)}<br>
+            Korrektsiya: ${korrektsiya.toFixed(2)}<br>
+            Konsolidatsiya: ${konsolidatsiya.toFixed(2)}
+        `;
     }
 
     function adminLogin() {
